@@ -127,3 +127,42 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ruff
+.ruff_cache/
+
+# Hatch
+.hatch/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project specific - DeepFake Detector
+logs/
+log/
+*.ckpt
+*.h5
+*.pb
+*.pth
+*.pt
+*.weights
+*.dat
+data/
+datasets/
+models/
+checkpoints/
+outputs/
+results/
+wandb/
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS
+Thumbs.db

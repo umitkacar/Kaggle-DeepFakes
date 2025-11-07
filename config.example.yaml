@@ -1,0 +1,39 @@
+# Example configuration file for DeepFake Detector
+
+# Paths
+log_dir: ./logs/dtn
+data_dir:
+  - ./data/train/fake
+  - ./data/train/real
+data_dir_val:
+  - ./data/val/fake
+  - ./data/val/real
+
+# Mode: training or testing
+mode: training
+
+# GPU Configuration
+gpu_usage: 1
+gpu_memory_growth: true
+
+# Logging
+log_level: INFO
+verbose: false
+
+# Model Configuration
+model:
+  image_size: 256
+  map_size: 64
+  filters: 32
+  tru_parameters:
+    alpha: 0.001
+    beta: 0.01
+    mu_update_rate: 0.001
+
+# Training Configuration
+training:
+  batch_size: 20
+  learning_rate: 0.0001
+  max_epochs: 70
+  steps_per_epoch: 2000
+  steps_per_epoch_val: 500
