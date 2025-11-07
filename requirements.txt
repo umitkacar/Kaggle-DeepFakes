@@ -1,0 +1,44 @@
+# Deep Tree Network for DeepFake Detection
+# Requirements File
+
+# Deep Learning Frameworks
+tensorflow>=2.4.0,<2.16.0
+tensorflow-gpu>=2.4.0,<2.16.0
+
+# Core Scientific Computing
+numpy>=1.19.5
+scipy>=1.5.4
+scikit-learn>=0.24.0
+
+# Computer Vision
+opencv-python>=4.5.0
+opencv-contrib-python>=4.5.0
+Pillow>=8.1.0
+
+# Image Processing & Augmentation
+imgaug>=0.4.0
+albumentations>=1.0.0
+
+# Data Handling
+pandas>=1.2.0
+h5py>=3.1.0
+
+# Visualization
+matplotlib>=3.3.0
+seaborn>=0.11.0
+
+# Progress Bars
+tqdm>=4.60.0
+
+# Development Tools
+jupyter>=1.0.0
+notebook>=6.2.0
+ipython>=7.20.0
+
+# Utilities
+PyYAML>=5.4.0
+
+# GPU Support (Optional)
+# Install these if you have CUDA-enabled GPU
+# cuda-toolkit>=11.0
+# cudnn>=8.0
