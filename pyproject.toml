@@ -1,0 +1,204 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "deepfake-detector"
+version = "1.0.0"
+description = "Advanced Deep Tree Network for DeepFake Detection with State-of-the-Art Performance"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = ["deepfake", "detection", "deep-learning", "tensorflow", "face-anti-spoofing", "computer-vision"]
+authors = [
+    { name = "Umit Kacar", email = "umitkacar@example.com" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+dependencies = [
+    "tensorflow>=2.4.0,<2.16.0",
+    "numpy>=1.19.5",
+    "opencv-python>=4.5.0",
+    "Pillow>=8.1.0",
+    "typer[all]>=0.9.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "loguru>=0.7.0",
+    "tqdm>=4.60.0",
+    "pyyaml>=5.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "ipython>=8.0.0",
+]
+gpu = [
+    "tensorflow-gpu>=2.4.0,<2.16.0",
+]
+viz = [
+    "matplotlib>=3.3.0",
+    "seaborn>=0.11.0",
+]
+
+[project.urls]
+Documentation = "https://github.com/umitkacar/Kaggle-DeepFakes#readme"
+Issues = "https://github.com/umitkacar/Kaggle-DeepFakes/issues"
+Source = "https://github.com/umitkacar/Kaggle-DeepFakes"
+
+[project.scripts]
+deepfake-detector = "deepfake_detector.cli:app"
+dfd = "deepfake_detector.cli:app"
+
+[tool.hatch.version]
+path = "src/deepfake_detector/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/docs",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/deepfake_detector"]
+
+[tool.hatch.envs.default]
+dependencies = [
+    "pytest",
+    "pytest-cov",
+    "black",
+    "ruff",
+    "mypy",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "pytest --cov=src/deepfake_detector {args:tests}"
+cov-report = [
+    "pytest --cov=src/deepfake_detector --cov-report=term-missing {args:tests}",
+]
+fmt = [
+    "black {args:.}",
+    "ruff --fix {args:.}",
+]
+check = [
+    "black --check {args:.}",
+    "ruff {args:.}",
+    "mypy {args:src/deepfake_detector}",
+]
+
+# Black configuration
+[tool.black]
+target-version = ["py38", "py39", "py310", "py311"]
+line-length = 100
+skip-string-normalization = false
+extend-exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+# Ruff configuration
+[tool.ruff]
+target-version = "py38"
+line-length = 100
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191",  # indentation contains tabs
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+known-first-party = ["deepfake_detector"]
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "tensorflow.*",
+    "cv2.*",
+    "numpy.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--showlocals",
+]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+branch = true
+parallel = true
+omit = [
+    "src/deepfake_detector/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

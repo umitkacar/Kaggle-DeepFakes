@@ -116,44 +116,93 @@ venv\Scripts\activate  # Windows
 git clone https://github.com/umitkacar/Kaggle-DeepFakes.git
 cd Kaggle-DeepFakes
 
-# Install dependencies
-pip install -r requirements.txt
+# Install with pip (recommended)
+pip install -e .
+
+# Or install with development dependencies
+pip install -e ".[dev]"
+
+# Setup pre-commit hooks
+make setup-hooks
 ```
 
 ### 💻 Usage
 
-#### 🎓 Training
+#### 🖥️ CLI Commands
 
-```python
-from model.config import Config
-from model.dataset import Dataset
-from model.model import Model
+The package provides a modern CLI with Typer:
 
-# Configure parameters
-config = Config()
-config.DATA_DIR = ['path/to/fake/images', 'path/to/real/images']
-config.BATCH_SIZE = 20
-config.LEARNING_RATE = 0.00001
-config.MAX_EPOCH = 1000
+```bash
+# Show help
+deepfake-detector --help
+dfd --help  # Short alias
 
-# Initialize dataset and model
-dataset = Dataset(config, 'train')
-model = Model(config)
+# Train a model
+deepfake-detector train \
+  --data-dir ./data/train/fake \
+  --data-dir ./data/train/real \
+  --val-dir ./data/val \
+  --epochs 100 \
+  --batch-size 20 \
+  --learning-rate 0.0001
 
-# Train the model
-model.compile()
-model.train(dataset)
+# Test a model
+deepfake-detector test \
+  --data-dir ./data/test \
+  --model ./logs/model.ckpt \
+  --output results.csv
+
+# Predict on single file
+deepfake-detector predict image.jpg \
+  --model ./logs/model.ckpt \
+  --visualize
+
+# Show configuration
+deepfake-detector config --show
+
+# Generate config template
+deepfake-detector config --generate config.yaml
 ```
 
-#### 🔍 Inference
+#### 🐍 Python API
 
 ```python
-# Load trained model
-model = Model(config)
-model.compile()
+from deepfake_detector.core.config import Settings
+from deepfake_detector.model import DTNModel
 
-# Predict on new image
-prediction = model.predict(image)
+# Load configuration
+settings = Settings()
+settings.training.batch_size = 20
+settings.training.learning_rate = 0.0001
+
+# Create and train model
+model = DTNModel(settings)
+model.train()
+
+# Predict
+result = model.predict("image.jpg")
+print(f"Is Fake: {result['is_fake']}, Confidence: {result['confidence']:.2%}")
+```
+
+#### ⚙️ Configuration
+
+Use YAML configuration file:
+
+```bash
+# Copy example config
+cp config.example.yaml config.yaml
+
+# Edit config.yaml with your settings
+# Then run with config
+deepfake-detector train --config config.yaml
+```
+
+Or use environment variables (prefix with `DFD_`):
+
+```bash
+export DFD_TRAINING__BATCH_SIZE=32
+export DFD_TRAINING__LEARNING_RATE=0.0001
+deepfake-detector train --data-dir ./data
 ```
 
 ### 📊 Pre-trained Weights
@@ -280,7 +329,16 @@ Download pre-trained model weights:
 ![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
 
-### 🔧 Development Tools
+### 🔧 Modern Development Tools
+
+![Typer](https://img.shields.io/badge/Typer-CLI-00ADD8?style=for-the-badge)
+![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+![Hatch](https://img.shields.io/badge/Hatch-Build-4051B5?style=for-the-badge)
+![Ruff](https://img.shields.io/badge/Ruff-Linter-261230?style=for-the-badge)
+![Black](https://img.shields.io/badge/Black-Formatter-000000?style=for-the-badge)
+![pre--commit](https://img.shields.io/badge/pre--commit-Hooks-FAB040?style=for-the-badge)
+
+### 📊 Additional Tools
 
 ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
@@ -295,19 +353,28 @@ Download pre-trained model weights:
 
 ```
 📦 Kaggle-DeepFakes
-┣ 📂 model/
-┃ ┣ 📜 model.py          # Deep Tree Network implementation
-┃ ┣ 📜 utils.py          # CRU, TRU, SFL components
-┃ ┣ 📜 dataset.py        # Data loading and preprocessing
-┃ ┣ 📜 config.py         # Configuration management
-┃ ┗ 📜 loss.py           # Custom loss functions
-┣ 📂 modelown/           # Custom model variants
-┣ 📂 xDeepFake-Test/     # Testing utilities
-┣ 📜 train.py            # Training script
-┣ 📜 dmap_prepare_*.py   # Depth map preparation
-┣ 📜 kaggle_analysis.ipynb   # Analysis notebook
-┣ 📜 kaggle_last.ipynb       # Final submission notebook
-┗ 📜 README.md           # This file
+┣ 📂 src/deepfake_detector/     # Main package (modern src layout)
+┃ ┣ 📂 core/                    # Core functionality
+┃ ┃ ┣ 📜 config.py              # Pydantic configuration
+┃ ┃ ┗ 📜 logger.py              # Loguru logging setup
+┃ ┣ 📂 model/                   # Model architecture
+┃ ┃ ┣ 📜 dtn.py                 # Deep Tree Network
+┃ ┃ ┣ 📜 layers.py              # Custom layers (CRU, TRU, SFL)
+┃ ┃ ┗ 📜 loss.py                # Loss functions
+┃ ┣ 📂 training/                # Training logic
+┃ ┃ ┗ 📜 trainer.py             # Training orchestration
+┃ ┣ 📂 inference/               # Inference logic
+┃ ┃ ┗ 📜 predictor.py           # Prediction interface
+┃ ┣ 📜 cli.py                   # Typer CLI interface
+┃ ┗ 📜 __about__.py             # Package metadata
+┣ 📂 tests/                     # Test suite
+┣ 📂 model/                     # Legacy model files
+┣ 📜 pyproject.toml             # Modern Python packaging (Hatch)
+┣ 📜 .pre-commit-config.yaml    # Pre-commit hooks
+┣ 📜 Makefile                   # Development shortcuts
+┣ 📜 config.example.yaml        # Configuration template
+┣ 📜 .env.example               # Environment variables template
+┗ 📜 README.md                  # This file
 ```
 
 ---
