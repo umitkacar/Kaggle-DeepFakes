@@ -202,3 +202,8 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
 ]
+
+# Bandit security checks configuration
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+skips = ["B101"]  # Skip assert_used in tests
