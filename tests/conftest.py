@@ -21,6 +21,7 @@ def pytest_configure(config: Config) -> None:
     config.addinivalue_line("markers", "unit: Unit tests")
     config.addinivalue_line("markers", "integration: Integration tests")
     config.addinivalue_line("markers", "slow: Slow running tests")
+    config.addinivalue_line("markers", "benchmark: Benchmark performance tests")
 
 
 def pytest_addoption(parser: Parser) -> None:
