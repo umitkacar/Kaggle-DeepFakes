@@ -111,12 +111,28 @@ venv\Scripts\activate  # Windows
 
 ### 📦 Installation
 
+#### 🎯 One-Command Setup (Recommended)
+
 ```bash
 # Clone the repository
 git clone https://github.com/umitkacar/Kaggle-DeepFakes.git
 cd Kaggle-DeepFakes
 
-# Install with pip (recommended)
+# Automated production setup
+make setup
+```
+
+This single command will:
+- ✅ Verify Python 3.8+ installation
+- ✅ Install all dependencies (production + development)
+- ✅ Set up pre-commit hooks (Black, Ruff, MyPy, etc.)
+- ✅ Run validation checks
+- ✅ Execute test suite
+
+#### 🔧 Manual Installation
+
+```bash
+# Install with pip (production only)
 pip install -e .
 
 # Or install with development dependencies
@@ -124,6 +140,9 @@ pip install -e ".[dev]"
 
 # Setup pre-commit hooks
 make setup-hooks
+
+# Validate installation
+make validate
 ```
 
 ### 💻 Usage
@@ -204,6 +223,152 @@ export DFD_TRAINING__BATCH_SIZE=32
 export DFD_TRAINING__LEARNING_RATE=0.0001
 deepfake-detector train --data-dir ./data
 ```
+
+---
+
+## 🛠️ Production-Ready Development Tools
+
+This repository follows **modern Python best practices** with comprehensive tooling for production deployments:
+
+### 🎨 Code Quality & Formatting
+
+<table>
+<tr>
+<td width="50%">
+
+**Automated Tools:**
+- 🎯 **Black** - Code formatter (100 char lines)
+- ⚡ **Ruff** - Ultra-fast linter (30+ rule categories)
+- 🔍 **MyPy** - Static type checker
+- 📝 **isort** - Import sorting
+- 🔒 **Bandit** - Security vulnerability scanner
+- ✨ **Pre-commit** - Git hooks automation
+
+</td>
+<td width="50%">
+
+**Quick Commands:**
+```bash
+# Format code
+make format
+
+# Run all linters
+make lint
+
+# Run all checks
+make check
+```
+
+</td>
+</tr>
+</table>
+
+### 🧪 Testing & Coverage
+
+**Comprehensive Test Suite:**
+- ✅ **pytest** - Modern testing framework
+- ⚡ **pytest-xdist** - Parallel test execution
+- 📊 **pytest-cov** - Coverage reporting (80% minimum)
+- 🎯 **pytest-benchmark** - Performance benchmarks
+- 🔀 **pytest-randomly** - Random test ordering
+
+```bash
+# Run all tests
+make test
+
+# Run tests in parallel (faster)
+make test-fast
+
+# Generate coverage report
+make test-cov
+# Open htmlcov/index.html to view
+
+# Run only unit tests
+make test-unit
+
+# Run only integration tests
+make test-integration
+```
+
+### 📦 Modern Package Management
+
+**Built with Hatch:**
+- 📋 **pyproject.toml** - Modern packaging (PEP 621)
+- 🏗️ **Hatch** - Build system and environment management
+- 🎯 **src layout** - Best practice package structure
+- 📚 **Type hints** - Full Pydantic v2 integration
+
+```bash
+# Using Hatch commands
+hatch run test           # Run tests
+hatch run test-fast      # Parallel execution
+hatch run test-cov       # With coverage
+hatch run fmt            # Format code
+hatch run lint           # Lint code
+hatch run all            # Format + Lint + Test
+```
+
+### 🔍 Validation & Quality Assurance
+
+**Automated Validation Script:**
+
+```bash
+# Run comprehensive validation
+make validate
+# or
+python3 scripts/validate.py
+```
+
+**Checks:**
+- ✅ Python syntax validation (all files)
+- ✅ Import structure verification
+- ✅ Package structure validation
+- ✅ Test configuration checks
+- ✅ Configuration file validation
+
+### 🚀 Production Deployment
+
+**Complete Pre-deployment Checklist:**
+
+```bash
+# One command for production readiness
+make production-check
+```
+
+This will:
+1. ✅ Run validation script
+2. ✅ Execute all linters (Ruff, Black, MyPy)
+3. ✅ Run full test suite with coverage
+4. ✅ Verify 80%+ code coverage
+5. ✅ Generate coverage reports
+
+**See detailed setup guide:** [PRODUCTION_SETUP.md](PRODUCTION_SETUP.md)
+
+### 📊 Available Make Commands
+
+Run `make help` to see all available commands:
+
+```bash
+make help              # Show all commands
+make setup             # Complete automated setup
+make validate          # Run validation checks
+make format            # Auto-format code
+make lint              # Run linters
+make test              # Run tests
+make test-fast         # Run tests in parallel
+make test-cov          # Tests with coverage report
+make clean             # Clean build artifacts
+make build             # Build package
+make production-check  # Full production validation
+```
+
+### 📖 Documentation
+
+- **[PRODUCTION_SETUP.md](PRODUCTION_SETUP.md)** - Complete production deployment guide
+- **[VALIDATION_REPORT.md](VALIDATION_REPORT.md)** - Latest validation results
+- **[docs/workflows/](docs/workflows/)** - GitHub Actions CI/CD templates
+
+---
 
 ### 📊 Pre-trained Weights
 
