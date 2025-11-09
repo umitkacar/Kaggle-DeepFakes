@@ -4,7 +4,22 @@ Thank you for your interest in contributing to DeepFake Detector! This document 
 
 ## 🚀 Quick Start
 
-### Development Setup
+### ⚡ One-Command Setup (Recommended)
+
+```bash
+git clone https://github.com/YOUR_USERNAME/Kaggle-DeepFakes.git
+cd Kaggle-DeepFakes
+make setup
+```
+
+This single command will:
+- ✅ Verify Python 3.8+ installation
+- ✅ Install all dependencies (production + development)
+- ✅ Set up pre-commit hooks (13 automated checks)
+- ✅ Run validation checks
+- ✅ Execute test suite
+
+### 🔧 Manual Setup (Alternative)
 
 1. **Fork and clone the repository**
    ```bash
@@ -32,6 +47,11 @@ Thank you for your interest in contributing to DeepFake Detector! This document 
    make setup-hooks
    ```
 
+5. **Validate installation**
+   ```bash
+   make validate
+   ```
+
 ## 🔧 Development Workflow
 
 ### 1. Create a Branch
@@ -54,18 +74,43 @@ Follow these guidelines:
 ### 3. Run Quality Checks
 
 ```bash
-# Format code
+# Validate code structure (fast, no dependencies)
+make validate
+
+# Format code (Black + Ruff + isort)
 make format
 
-# Run linters
+# Run linters (Ruff + Black check + MyPy)
 make lint
 
-# Run tests
+# Run tests (all)
 make test
 
-# Or run everything
-make format && make lint && make test
+# Run tests in parallel (faster)
+make test-fast
+
+# Run tests with coverage
+make test-cov
+
+# Run only unit tests
+make test-unit
+
+# Run all checks at once
+make check  # Runs: format + lint + test-fast
+
+# Complete production readiness check
+make production-check  # Runs: validate + lint + test-cov
 ```
+
+**Quick Reference:**
+| Command | What it does | When to use |
+|---------|-------------|-------------|
+| `make validate` | Fast structure check (< 2 sec) | Before committing |
+| `make format` | Auto-format code | Before committing |
+| `make test-fast` | Parallel tests (quick) | During development |
+| `make test-cov` | Tests with coverage | Before PR |
+| `make check` | All quality checks | Before pushing |
+| `make production-check` | Full validation | Before release |
 
 ### 4. Commit Your Changes
 
