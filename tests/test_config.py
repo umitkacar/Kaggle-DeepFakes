@@ -5,6 +5,7 @@ from pathlib import Path
 from deepfake_detector.core.config import Settings, ModelConfig, TrainingConfig, TRUParameters
 
 
+@pytest.mark.unit
 def test_default_settings():
     """Test default settings initialization."""
     settings = Settings()
@@ -13,6 +14,7 @@ def test_default_settings():
     assert settings.gpu_usage == 1
 
 
+@pytest.mark.unit
 def test_model_config():
     """Test model configuration."""
     model_config = ModelConfig()
@@ -21,6 +23,7 @@ def test_model_config():
     assert model_config.filters == 32
 
 
+@pytest.mark.unit
 def test_training_config():
     """Test training configuration."""
     training_config = TrainingConfig()
@@ -29,6 +32,7 @@ def test_training_config():
     assert training_config.max_epochs == 70
 
 
+@pytest.mark.unit
 def test_tru_parameters():
     """Test TRU parameters."""
     tru_params = TRUParameters()
@@ -37,6 +41,7 @@ def test_tru_parameters():
     assert tru_params.mu_update_rate == 1e-3
 
 
+@pytest.mark.unit
 def test_settings_validation():
     """Test settings validation."""
     settings = Settings()
@@ -50,6 +55,7 @@ def test_settings_validation():
     assert settings.training.learning_rate == 0.001
 
 
+@pytest.mark.unit
 def test_settings_display(capsys):
     """Test settings display method."""
     settings = Settings()

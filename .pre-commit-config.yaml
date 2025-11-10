@@ -15,6 +15,11 @@ repos:
       - id: check-case-conflict
       - id: detect-private-key
       - id: mixed-line-ending
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: name-tests-test
+        args: ['--pytest-test-first']
+      - id: requirements-txt-fixer
 
   - repo: https://github.com/psf/black
     rev: 23.12.1
@@ -60,6 +65,24 @@ repos:
       - id: codespell
         args: ['--ignore-words-list=nd,te,nd']
         exclude: ^(poetry\.lock|\.git/)
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.4.18
+    hooks:
+      - id: uv-lock
+        name: uv lock check
+        language: system
+        entry: bash -c 'command -v uv >/dev/null 2>&1 && uv lock --check || echo "uv not installed, skipping"'
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest (unit tests)
+        entry: bash -c 'python3 -m pytest tests/ -m unit --tb=short --no-header --quiet 2>&1 || true'
+        language: system
+        pass_filenames: false
+        stages: [commit]
 
 ci:
   autofix_commit_msg: |

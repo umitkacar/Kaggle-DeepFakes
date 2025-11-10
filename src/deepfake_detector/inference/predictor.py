@@ -5,7 +5,7 @@ Provides high-level interface for running inference on images and videos.
 """
 
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 import cv2
 import numpy as np
